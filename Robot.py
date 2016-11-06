@@ -3,7 +3,7 @@
 
 """
 Crée le 03/07/16
-Dernière modification le 03/07/16
+Dernière modification le 06/11/16
 Author: Najibe BOUZIDI
 """
 
@@ -43,7 +43,7 @@ class Robot():
     def _get_robot_position(self):
         '''Renvoie les coordonnées du centre du robot dans la fenêtre'''
         x0, y0, x1, y1 = self.canvas.coords(self.circle)
-        return x0 + 25, y0 + 25
+        return x0 + ROBOT_WIDTH / 2, y0 + ROBOT_HEIGHT / 2
 
     def _set_robot_position(self, x, y):
         '''Définit la position du robot dans la fenêtre'''
@@ -53,16 +53,26 @@ class Robot():
     # PROPRIETES
     # ----------
 
-    # def move_random(self):
-    #     '''Déplace le robot aléatoirement'''
+    def move_elem(self, delta_elem_x, delta_elem_y, x_goal, y_goal):
+        '''Déplacement élémentaire du robot'''
 
-    #     # Coordonnées du robot
-    #     x0, y0, x1, y1 = self.canvas.coords(self.circle)
+        # On récupère les coordonnées courantes du robot
+        x0, y0, x1, y1 = self.canvas.coords(self.circle)
 
-    #     self.canvas.move(self.circle, 1, 0)
+        # Si l'objectif n'est pas encore atteint, on boucle
+        if x0 != x_goal and y0 != y_goal:
 
-    #     # Boucle toutes les 20ms
-    #     self.cancel_id = self.fen.after(20, self.move_random)
+            # Déplacement élémentaire
+            self.canvas.move(self.circle, delta_elem_x, delta_elem_y)
+
+            # Boucle
+            self.cancel_id = self.fenetre.after(
+                50, self.move_elem, delta_elem_x, delta_elem_y, x_goal, y_goal)
+
+        # Si l'objectif est atteint, on stoppe le robot
+        else:
+
+            self.stop
 
     def move_to(self, x_goal, y_goal):
         '''Déplace le robot vers un point donné'''
@@ -70,30 +80,16 @@ class Robot():
         # On récupère les coordonnées courantes du robot
         x0, y0, x1, y1 = self.canvas.coords(self.circle)
 
-        # On calcule le déplacement à effectuer
+        # On calcule le déplacement total à effectuer
         delta_x = x_goal - (x0 + (ROBOT_WIDTH / 2))
         delta_y = y_goal - (y0 + (ROBOT_HEIGHT / 2))
 
-        # On décompose le déplacement total en déplacements élémentaires
-        delta_x_elem = delta_x
-        delta_y_elem = delta_y
-
-        # # On déplace le robot
-        # while x0 != x_goal and y0 != y_goal:
-        #     self.canvas.move(self.circle, delta_x_elem, delta_y_elem)
-        #     # Màj coordonnées du robot
-        #     x0, y0, x1, y1 = self.canvas.coords(self.circle)
+        # On calcule le déplacement élémentaire à effectuer
+        delta_elem_x = 0.1 * delta_x
+        delta_elem_y = 0.1 * delta_y
 
         # On déplace le robot
-        self.canvas.move(self.circle, delta_x_elem, delta_y_elem)
-
-        # On récupère ses nouvelles coordonnées
-        x0, y0, x1, y1 = self.canvas.coords(self.circle)
-
-        # Si l'objectif n'est pas encore atteint, on boucle
-        if x0 != x_goal and y0 != y_goal:
-            # Màj coordonnées du robot
-            self.cancel_id = self.fenetre.after(20, self.move_to(x_goal, y_goal))
+        self.move_elem(delta_elem_x, delta_elem_y, x_goal, y_goal)
 
     def stop(self):
         '''Stoppe le robot'''
