@@ -3,7 +3,7 @@
 
 """
 Crée le 03/07/16
-Dernière modification le 03/07/16
+Dernière modification le 06/11/16
 Author: Najibe BOUZIDI
 """
 
@@ -38,8 +38,6 @@ class Environnement():
 
         # Sous-menu
         self.menu1 = Tk.Menu(self.menu, tearoff=0)
-        self.menu1.add_command(label="Déplacer le robot",
-                               command=self.move_robot)
         self.menu1.add_command(label="Atteindre l'objectif",
                                command=self.move_robot_to_objective)
         self.menu1.add_command(label="Stopper le robot",
@@ -60,10 +58,6 @@ class Environnement():
         # Ajout d'un objectif
         self.objectif = self.canvas.create_oval(
             TARGET_X, TARGET_Y, TARGET_X + TARGET_WIDTH, TARGET_Y + TARGET_HEIGHT, fill="red")
-
-    def move_robot(self):
-        '''Déplace le robot'''
-        self.robot.move_random()
 
     def move_robot_to_objective(self):
         '''Déplace le robot vers l'objectif'''
