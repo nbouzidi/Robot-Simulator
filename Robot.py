@@ -8,8 +8,6 @@ Author: Najibe BOUZIDI
 """
 
 import Tkinter as Tk
-import time
-import random
 
 # ----------
 # CONSTANTES
@@ -67,12 +65,13 @@ class Robot():
 
             # Boucle
             self.cancel_id = self.fenetre.after(
-                50, self.move_elem, delta_elem_x, delta_elem_y, x_goal, y_goal)
+                100, self.move_elem, delta_elem_x, delta_elem_y, x_goal, y_goal)
 
         # Si l'objectif est atteint, on stoppe le robot
         else:
 
             self.stop
+            exit
 
     def move_to(self, x_goal, y_goal):
         '''Déplace le robot vers un point donné'''
@@ -80,13 +79,12 @@ class Robot():
         # On récupère les coordonnées courantes du robot
         x0, y0, x1, y1 = self.canvas.coords(self.circle)
 
-        # On calcule le déplacement total à effectuer
-        delta_x = x_goal - (x0 + (ROBOT_WIDTH / 2))
-        delta_y = y_goal - (y0 + (ROBOT_HEIGHT / 2))
+        delta_x = x_goal - x0
+        delta_y = y_goal - y0
 
         # On calcule le déplacement élémentaire à effectuer
-        delta_elem_x = 0.1 * delta_x
-        delta_elem_y = 0.1 * delta_y
+        delta_elem_x = 0.05 * delta_x
+        delta_elem_y = 0.05 * delta_y
 
         # On déplace le robot
         self.move_elem(delta_elem_x, delta_elem_y, x_goal, y_goal)
