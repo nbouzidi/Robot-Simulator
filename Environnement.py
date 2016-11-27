@@ -14,8 +14,22 @@ import Robot
 # CONSTANTES
 # ----------
 
-TARGET_X = 100
-TARGET_Y = 100
+TARGET_X_1 = 100
+TARGET_Y_1 = 100
+
+TARGET_X_2 = 150
+TARGET_Y_2 = 200
+
+TARGET_X_3 = 200
+TARGET_Y_3 = 300
+
+# Chemin à parcourir
+PATH = [(TARGET_X_1, TARGET_Y_1),
+        (TARGET_X_2, TARGET_Y_2),
+        (TARGET_X_3, TARGET_Y_3)]
+
+# PATH = [(TARGET_X_1, TARGET_Y_1)]
+
 TARGET_WIDTH = 50
 TARGET_HEIGHT = 50
 
@@ -39,9 +53,11 @@ class Environnement():
         # Sous-menu
         self.menu1 = Tk.Menu(self.menu, tearoff=0)
         self.menu1.add_command(label="Atteindre l'objectif",
-                               command=self.move_robot_to_objective)
+                               command=lambda: self.follow_path(PATH))
+
         self.menu1.add_command(label="Stopper le robot",
                                command=self.stop_robot)
+
         self.menu1.add_command(label="Quitter", command=self.fen.quit)
 
         # Ajout du sous-menu au menu principal
@@ -53,16 +69,34 @@ class Environnement():
         self.canvas.pack()
 
         # Ajout d'un robot
-        self.robot = Robot.Robot(self.fen, self.canvas, 225, 225, "blue")
+        self.robot = Robot.Robot(self.fen, self.canvas, 50, 50, "blue")
 
-        # Ajout d'un objectif
+        # Ajout des objectifs
         self.objectif = self.canvas.create_oval(
-            TARGET_X, TARGET_Y, TARGET_X + TARGET_WIDTH, TARGET_Y + TARGET_HEIGHT, fill="red")
+            TARGET_X_1, TARGET_Y_1, TARGET_X_1 + TARGET_WIDTH, TARGET_Y_1 + TARGET_HEIGHT, fill="red")
 
-    def move_robot_to_objective(self):
+        self.objectif2 = self.canvas.create_oval(
+            TARGET_X_2, TARGET_Y_2, TARGET_X_2 + TARGET_WIDTH, TARGET_Y_2 + TARGET_HEIGHT, fill="red")
+
+        self.objectif3 = self.canvas.create_oval(
+            TARGET_X_3, TARGET_Y_3, TARGET_X_3 + TARGET_WIDTH, TARGET_Y_3 + TARGET_HEIGHT, fill="red")
+
+    def follow_path(self, PATH):
+        '''Déplace le robot selon le chemin PATH'''
+        # for point in enumerate(PATH):
+        #     print "Point cible: ",point
+        #     self.move_robot_to_point(*point)
+
+        self.move_robot_to_point(TARGET_X_1, TARGET_Y_1)
+
+        self.move_robot_to_point(TARGET_X_2, TARGET_Y_2)
+
+        self.move_robot_to_point(TARGET_X_3, TARGET_Y_3)
+
+    def move_robot_to_point(self, x_goal, y_goal):
         '''Déplace le robot vers l'objectif'''
-        self.robot.move_to(TARGET_X + (TARGET_WIDTH / 2),
-                           TARGET_Y + (TARGET_HEIGHT / 2))
+        # self.robot.move_to(y_goal[0], y_goal[1])
+        self.robot.move_to(y_goal, y_goall)
 
     def stop_robot(self):
         '''Stoppe le robot'''
